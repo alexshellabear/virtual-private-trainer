@@ -1,0 +1,96 @@
+{
+    "routine": [
+        {
+            "title": "Warmup",
+            "sets": 2,
+            "activity": [
+                {
+                    "activity": "Cardio machine Sprint",
+                    "duration": 15
+                },
+                {
+                    "activity": "Cobra to Pike",
+                    "reps": 5
+                },
+                {
+                    "activity": "Push Ups Shoulder Tap",
+                    "reps": 8
+                },
+                {
+                    "activity": "Plate Halo",
+                    "reps_per_side": 8
+                }
+            ]
+        },
+        {
+            "title": "Hot Start",
+            "note": "12-10-8-6-4 Reps. 20 KB Swings after every round.",
+            "activity": [
+                {
+                    "activity": "Gorilla Box Jump Overs",
+                    "reps": [12, 10, 8, 6, 4]
+                },
+                {
+                    "activity": "Sprawl to KB High Pull",
+                    "reps": [12, 10, 8, 6, 4]
+                },
+                {
+                    "activity": "KB Swings",
+                    "reps": 20
+                }
+            ]
+        },
+        {
+            "title": "Bench Press & Row",
+            "sets": 4,
+            "rest": 120,
+            "activity": [
+                {
+                    "activity": "Bench Press",
+                    "reps": 5,
+                    "weight_kg": "50-60",
+                    "note": "60kg x4, 50kg x5. @85-90%"
+                },
+                {
+                    "activity": "Renegade Row",
+                    "reps_per_side": 8,
+                    "weight_kg": 12.5
+                }
+            ]
+        },
+        {
+            "title": "Shoulder Press & Row",
+            "sets": 3,
+            "rest": 120,
+            "circuit": [
+                {
+                    "activity": "Alternating Seated Dumbbell Shoulder Press",
+                    "reps_per_side": 8,
+                    "weight_kg": 10
+                },
+                {
+                    "activity": "Kettlebell Chainsaw Row",
+                    "reps_per_side": 12
+                }
+            ]
+        },
+        {
+            "title": "Strength Workout",
+            "sets": 5,
+            "activity": [
+                {
+                    "activity": "Kettlebell Horn Curl",
+                    "reps": 12
+                },
+                {
+                    "activity": "Plate Straight leg sit ups",
+                    "reps": 12
+                },
+                {
+                    "activity": "Narrow Incline Push Up",
+                    "reps": 12
+                }
+            ]
+        }
+    ]
+}

@@ -1,0 +1,126 @@
+{
+    "routine": [
+        {
+            "activity": "Warm up with cardio machine of your choice",
+            "audio": [
+                "Ready to start your lower body strength workout? Let's begin with a warm-up on your favorite cardio machine",
+                "Choose a rower, bike or even go for a run",
+                "Get ready to move!"
+            ],
+            "duration": 2
+        },
+        {
+            "title": "Dynamic Stretching & Movement Prep",
+            "audio": [
+                "Moving onto the warm up",
+                "There will be 3 sets of 4 warm ups to activate muscles for squats."
+            ],
+            "sets": 3,
+            "activity": [
+                {
+                    "activity": "World Greatest stretch",
+                    "sets": 1,
+                    "reps_per_side": 5,
+                    "audio": [
+                        "First up is the world greatest stretch",
+                        "Step one foot forward into a lunge position",
+                        "Place both hands on the ground inside your front foot",
+                        "Rotate your torso and reach your arm up towards the ceiling",
+                        "Hold for a moment, then return your hand to the ground",
+                        "Step back to the starting position and repeat on the other side"
+                    ]
+                },
+                {
+                    "activity": "One and a Quarter Air Squat",
+                    "sets": 1,
+                    "reps": 10,
+                    "audio": [
+                        "Next we have the one and a quarter air squat",
+                        "Stand with your feet shoulder-width apart",
+                        "Lower into a squat position, going as low as you can while keeping your chest up",
+                        "Rise back up halfway, then lower back down into the squat",
+                        "Finally, stand all the way up to complete one rep"
+                    ]
+                },
+                {
+                    "activity": "90/90 ER Hinge",
+                    "sets": 1,
+                    "reps_per_side": 5,
+                    "audio": [
+                        "Now let's do the 90/90 ER hinge",
+                        "Sit on the ground with one leg bent in front of you at a 90-degree angle and the other leg bent behind you also at a 90-degree angle",
+                        "Place your hands on your hips and engage your core",
+                        "Hinge forward at the hips, keeping your back straight and chest up",
+                        "Return to the starting position and repeat on the other side"
+                    ]
+                },
+                {
+                    "activity": "Glute Bridge",
+                    "sets": 1,
+                    "reps": 10,
+                    "audio": [
+                        "Finally, we have the glute bridge",
+                        "Lie on your back with your knees bent and feet flat on the ground, hip-width apart",
+                        "Place your arms at your sides with palms facing down",
+                        "Engage your core and squeeze your glutes as you lift your hips towards the ceiling",
+                        "Hold for a moment at the top, then slowly lower your hips back down to the starting position"
+                    ]
+                }
+            ]
+        },
+        {
+            "activity": "Back squat",
+            "sets": 4,
+            "reps": 5,
+            "rest": 120,
+            "weight_kg": 75,
+            "audio": [
+                "Now we are ready for back squats",
+                "Set up under the bar with it resting on your upper traps",
+                "Keep your chest up and core engaged as you descend into the squat",
+                "Drive through your heels to return to standing",
+                "Let's get started with 4 sets of 5 reps"
+            ]
+        },
+        {
+            "title": "Strength Workout",
+            "sets": 4,
+            "rest": 120,
+            "activity": [
+                {
+                    "activity": "Zercher Romanian dead lifts",
+                    "reps": 8,
+                    "weight_kg": 30
+                },
+                {
+                    "activity": "Elevated dumbbell Reverse lunges",
+                    "reps_per_side": 6,
+                    "weight_kg": 15
+                }
+            ]
+        },
+        {
+            "title": "Accessory Circuit",
+            "sets": 3,
+            "rest": 120,
+            "activity": [
+                {
+                    "activity": "Cyclist Goblet Squat",
+                    "reps": 15,
+                    "weight_kg": 24
+                },
+                {
+                    "activity": "Prone Banded Hamstring Curl",
+                    "reps": 15,
+                    "band_resistance": "Red and yellow"
+                },
+                {
+                    "activity": "Calf raises",
+                    "reps": 15,
+                    "weight_kg": "Bodyweight"
+                }
+            ]
+        }
+
+    ]
+}

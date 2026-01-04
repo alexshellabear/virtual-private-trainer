@@ -1,0 +1,101 @@
+2026-01-04 20:23:31,787 - DEBUG - text: I see you. Tracking initialized.
+2026-01-04 20:23:31,787 - DEBUG - tld: com.au
+2026-01-04 20:23:31,788 - DEBUG - lang: en
+2026-01-04 20:23:31,788 - DEBUG - slow: False
+2026-01-04 20:23:31,788 - DEBUG - lang_check: True
+2026-01-04 20:23:31,788 - DEBUG - pre_processor_funcs: [<function tone_marks at 0x000002CD4A5C77E0>, <function end_of_line at 0x000002CD4A5D4220>, <function abbreviations at 0x000002CD4A5D40E0>, <function word_sub at 0x000002CD4A5D42C0>]
+2026-01-04 20:23:31,788 - DEBUG - tokenizer_func: <bound method Tokenizer.run of re.compile('(?<=\\?).|(?<=!).|(?<=\uff1f).|(?<=\uff01).|(?<!\\.[a-z])\\. |(?<!\\.[a-z]), |(?<!\\d):|\\]|¿|…|\uff1a|\uff0c|\u2025|\u3001|—|\\)|\u060c|;|\\[|¡|\\\n|\\(|\u3002', re.IGNORECASE) from: [<function tone_marks at 0x000002CD4A5D44A0>, <function period_comma at 0x000002CD4A5D4540>, <function colon at 0x000002CD4A5D45E0>, <function other_punctuation at 0x000002CD4A5D4680>]>
+2026-01-04 20:23:31,790 - DEBUG - timeout: None
+2026-01-04 20:23:31,791 - DEBUG - langs: {'af': 'Afrikaans', 'am': 'Amharic', 'ar': 'Arabic', 'bg': 'Bulgarian', 'bn': 'Bengali', 'bs': 'Bosnian', 'ca': 'Catalan', 'cs': 'Czech', 'cy': 'Welsh', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian', 'eu': 'Basque', 'fi': 'Finnish', 'fr': 'French', 'fr-CA': 'French (Canada)', 'gl': 'Galician', 'gu': 'Gujarati', 'ha': 'Hausa', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew', 'ja': 'Japanese', 'jw': 'Javanese', 'km': 'Khmer', 'kn': 'Kannada', 'ko': 'Korean', 'la': 'Latin', 'lt': 'Lithuanian', 'lv': 'Latvian', 'ml': 'Malayalam', 'mr': 'Marathi', 'ms': 'Malay', 'my': 'Myanmar (Burmese)', 'ne': 'Nepali', 'nl': 'Dutch', 'no': 'Norwegian', 'pa': 'Punjabi (Gurmukhi)', 'pl': 'Polish', 'pt': 'Portuguese (Brazil)', 'pt-PT': 'Portuguese (Portugal)', 'ro': 'Romanian', 'ru': 'Russian', 'si': 'Sinhala', 'sk': 'Slovak', 'sq': 'Albanian', 'sr': 'Serbian', 'su': 'Sundanese', 'sv': 'Swedish', 'sw': 'Swahili', 'ta': 'Tamil', 'te': 'Telugu', 'th': 'Thai', 'tl': 'Filipino', 'tr': 'Turkish', 'uk': 'Ukrainian', 'ur': 'Urdu', 'vi': 'Vietnamese', 'yue': 'Cantonese', 'zh-CN': 'Chinese (Simplified)', 'zh-TW': 'Chinese (Mandarin/Taiwan)', 'zh': 'Chinese (Mandarin)'}
+2026-01-04 20:23:31,793 - DEBUG - pre-processing: <function tone_marks at 0x000002CD4A5C77E0>
+2026-01-04 20:23:31,800 - DEBUG - pre-processing: <function end_of_line at 0x000002CD4A5D4220>
+2026-01-04 20:23:31,801 - DEBUG - pre-processing: <function abbreviations at 0x000002CD4A5D40E0>
+2026-01-04 20:23:31,803 - DEBUG - pre-processing: <function word_sub at 0x000002CD4A5D42C0>
+2026-01-04 20:23:31,804 - DEBUG - text_parts: ['I see you. Tracking initialized.']
+2026-01-04 20:23:31,804 - DEBUG - text_parts: 1
+2026-01-04 20:23:31,804 - DEBUG - data-0: f.req=%5B%5B%5B%22jQ1olc%22%2C%22%5B%5C%22I%20see%20you.%20Tracking%20initialized.%5C%22%2C%5C%22en%5C%22%2Cnull%2C%5C%22null%5C%22%5D%22%2Cnull%2C%22generic%22%5D%5D%5D&
+2026-01-04 20:23:31,806 - DEBUG - Starting new HTTPS connection (1): translate.google.com.au:443
+2026-01-04 20:23:32,979 - DEBUG - https://translate.google.com.au:443 "POST /_/TranslateWebserverUi/data/batchexecute HTTP/1.1" 200 None
+2026-01-04 20:23:33,075 - DEBUG - headers-0: {'Referer': 'http://translate.google.com/', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36', 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8', 'Content-Length': '170'}
+2026-01-04 20:23:33,075 - DEBUG - url-0: https://translate.google.com.au/_/TranslateWebserverUi/data/batchexecute
+2026-01-04 20:23:33,075 - DEBUG - status-0: 200
+2026-01-04 20:23:33,078 - DEBUG - part-0 written to <_io.BufferedWriter name='c:\\Users\\alexs\\repos\\virtual-private-trainer\\audio-lib\\a058d86b577d4de3577a0d55526c940f.mp3'>
+2026-01-04 20:23:33,078 - DEBUG - part-0 created
+2026-01-04 20:23:33,078 - DEBUG - Saved to c:\Users\alexs\repos\virtual-private-trainer\audio-lib\a058d86b577d4de3577a0d55526c940f.mp3
+2026-01-04 20:23:33,087 - DEBUG - text: Step back, I can't see your feet.
+2026-01-04 20:23:33,087 - DEBUG - tld: com.au
+2026-01-04 20:23:33,087 - DEBUG - lang: en
+2026-01-04 20:23:33,087 - DEBUG - slow: False
+2026-01-04 20:23:33,087 - DEBUG - lang_check: True
+2026-01-04 20:23:33,087 - DEBUG - pre_processor_funcs: [<function tone_marks at 0x000002CD4A5C77E0>, <function end_of_line at 0x000002CD4A5D4220>, <function abbreviations at 0x000002CD4A5D40E0>, <function word_sub at 0x000002CD4A5D42C0>]
+2026-01-04 20:23:33,087 - DEBUG - tokenizer_func: <bound method Tokenizer.run of re.compile('(?<=\\?).|(?<=!).|(?<=\uff1f).|(?<=\uff01).|(?<!\\.[a-z])\\. |(?<!\\.[a-z]), |(?<!\\d):|\\]|¿|…|\uff1a|\uff0c|\u2025|\u3001|—|\\)|\u060c|;|\\[|¡|\\\n|\\(|\u3002', re.IGNORECASE) from: [<function tone_marks at 0x000002CD4A5D44A0>, <function period_comma at 0x000002CD4A5D4540>, <function colon at 0x000002CD4A5D45E0>, <function other_punctuation at 0x000002CD4A5D4680>]>
+2026-01-04 20:23:33,087 - DEBUG - timeout: None
+2026-01-04 20:23:33,087 - DEBUG - langs: {'af': 'Afrikaans', 'am': 'Amharic', 'ar': 'Arabic', 'bg': 'Bulgarian', 'bn': 'Bengali', 'bs': 'Bosnian', 'ca': 'Catalan', 'cs': 'Czech', 'cy': 'Welsh', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian', 'eu': 'Basque', 'fi': 'Finnish', 'fr': 'French', 'fr-CA': 'French (Canada)', 'gl': 'Galician', 'gu': 'Gujarati', 'ha': 'Hausa', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew', 'ja': 'Japanese', 'jw': 'Javanese', 'km': 'Khmer', 'kn': 'Kannada', 'ko': 'Korean', 'la': 'Latin', 'lt': 'Lithuanian', 'lv': 'Latvian', 'ml': 'Malayalam', 'mr': 'Marathi', 'ms': 'Malay', 'my': 'Myanmar (Burmese)', 'ne': 'Nepali', 'nl': 'Dutch', 'no': 'Norwegian', 'pa': 'Punjabi (Gurmukhi)', 'pl': 'Polish', 'pt': 'Portuguese (Brazil)', 'pt-PT': 'Portuguese (Portugal)', 'ro': 'Romanian', 'ru': 'Russian', 'si': 'Sinhala', 'sk': 'Slovak', 'sq': 'Albanian', 'sr': 'Serbian', 'su': 'Sundanese', 'sv': 'Swedish', 'sw': 'Swahili', 'ta': 'Tamil', 'te': 'Telugu', 'th': 'Thai', 'tl': 'Filipino', 'tr': 'Turkish', 'uk': 'Ukrainian', 'ur': 'Urdu', 'vi': 'Vietnamese', 'yue': 'Cantonese', 'zh-CN': 'Chinese (Simplified)', 'zh-TW': 'Chinese (Mandarin/Taiwan)', 'zh': 'Chinese (Mandarin)'}
+2026-01-04 20:23:33,088 - DEBUG - pre-processing: <function tone_marks at 0x000002CD4A5C77E0>
+2026-01-04 20:23:33,088 - DEBUG - pre-processing: <function end_of_line at 0x000002CD4A5D4220>
+2026-01-04 20:23:33,088 - DEBUG - pre-processing: <function abbreviations at 0x000002CD4A5D40E0>
+2026-01-04 20:23:33,088 - DEBUG - pre-processing: <function word_sub at 0x000002CD4A5D42C0>
+2026-01-04 20:23:33,088 - DEBUG - text_parts: ["Step back, I can't see your feet."]
+2026-01-04 20:23:33,088 - DEBUG - text_parts: 1
+2026-01-04 20:23:33,088 - DEBUG - data-0: f.req=%5B%5B%5B%22jQ1olc%22%2C%22%5B%5C%22Step%20back%2C%20I%20can%27t%20see%20your%20feet.%5C%22%2C%5C%22en%5C%22%2Cnull%2C%5C%22null%5C%22%5D%22%2Cnull%2C%22generic%22%5D%5D%5D&
+2026-01-04 20:23:33,090 - DEBUG - Starting new HTTPS connection (1): translate.google.com.au:443
+2026-01-04 20:23:34,192 - DEBUG - https://translate.google.com.au:443 "POST /_/TranslateWebserverUi/data/batchexecute HTTP/1.1" 200 None
+2026-01-04 20:23:34,411 - DEBUG - headers-0: {'Referer': 'http://translate.google.com/', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36', 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8', 'Content-Length': '179'}
+2026-01-04 20:23:34,411 - DEBUG - url-0: https://translate.google.com.au/_/TranslateWebserverUi/data/batchexecute
+2026-01-04 20:23:34,411 - DEBUG - status-0: 200
+2026-01-04 20:23:34,412 - DEBUG - part-0 written to <_io.BufferedWriter name='c:\\Users\\alexs\\repos\\virtual-private-trainer\\audio-lib\\fc1a19602fc990837cdf2017c9d4d652.mp3'>
+2026-01-04 20:23:34,412 - DEBUG - part-0 created
+2026-01-04 20:23:34,412 - DEBUG - Saved to c:\Users\alexs\repos\virtual-private-trainer\audio-lib\fc1a19602fc990837cdf2017c9d4d652.mp3
+2026-01-04 20:23:37,665 - INFO - Playing Audio: Ready to start your lower body strength workout? Let's begin with a warm-up on your favorite cardio machine
+2026-01-04 20:23:40,199 - DEBUG - Loop State: REST, Index: 0
+2026-01-04 20:23:42,874 - INFO - Playing Audio: Choose a rower, bike or even go for a run
+2026-01-04 20:23:45,018 - DEBUG - Loop State: REST, Index: 0
+2026-01-04 20:23:47,956 - INFO - Playing Audio: Get ready to move!
+2026-01-04 20:23:49,335 - DEBUG - Loop State: REST, Index: 0
+2026-01-04 20:23:49,494 - INFO - State changed to ACTIVE for Warm up with cardio machine of your choice
+2026-01-04 20:23:51,614 - INFO - Exercise complete.
+2026-01-04 20:23:52,494 - INFO - Playing Audio: Moving onto the warm up
+2026-01-04 20:23:53,725 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:23:54,275 - INFO - Playing Audio: There will be 3 sets of 4 warm ups to activate muscles for squats.
+2026-01-04 20:23:54,739 - DEBUG - text: Move back, I can't see your head.
+2026-01-04 20:23:54,739 - DEBUG - tld: com.au
+2026-01-04 20:23:54,739 - DEBUG - lang: en
+2026-01-04 20:23:54,739 - DEBUG - slow: False
+2026-01-04 20:23:54,740 - DEBUG - lang_check: True
+2026-01-04 20:23:54,740 - DEBUG - pre_processor_funcs: [<function tone_marks at 0x000002CD4A5C77E0>, <function end_of_line at 0x000002CD4A5D4220>, <function abbreviations at 0x000002CD4A5D40E0>, <function word_sub at 0x000002CD4A5D42C0>]
+2026-01-04 20:23:54,740 - DEBUG - tokenizer_func: <bound method Tokenizer.run of re.compile('(?<=\\?).|(?<=!).|(?<=\uff1f).|(?<=\uff01).|(?<!\\.[a-z])\\. |(?<!\\.[a-z]), |(?<!\\d):|\\]|¿|…|\uff1a|\uff0c|\u2025|\u3001|—|\\)|\u060c|;|\\[|¡|\\\n|\\(|\u3002', re.IGNORECASE) from: [<function tone_marks at 0x000002CD4A5D44A0>, <function period_comma at 0x000002CD4A5D4540>, <function colon at 0x000002CD4A5D45E0>, <function other_punctuation at 0x000002CD4A5D4680>]>
+2026-01-04 20:23:54,740 - DEBUG - timeout: None
+2026-01-04 20:23:54,740 - DEBUG - langs: {'af': 'Afrikaans', 'am': 'Amharic', 'ar': 'Arabic', 'bg': 'Bulgarian', 'bn': 'Bengali', 'bs': 'Bosnian', 'ca': 'Catalan', 'cs': 'Czech', 'cy': 'Welsh', 'da': 'Danish', 'de': 'German', 'el': 'Greek', 'en': 'English', 'es': 'Spanish', 'et': 'Estonian', 'eu': 'Basque', 'fi': 'Finnish', 'fr': 'French', 'fr-CA': 'French (Canada)', 'gl': 'Galician', 'gu': 'Gujarati', 'ha': 'Hausa', 'hi': 'Hindi', 'hr': 'Croatian', 'hu': 'Hungarian', 'id': 'Indonesian', 'is': 'Icelandic', 'it': 'Italian', 'iw': 'Hebrew', 'ja': 'Japanese', 'jw': 'Javanese', 'km': 'Khmer', 'kn': 'Kannada', 'ko': 'Korean', 'la': 'Latin', 'lt': 'Lithuanian', 'lv': 'Latvian', 'ml': 'Malayalam', 'mr': 'Marathi', 'ms': 'Malay', 'my': 'Myanmar (Burmese)', 'ne': 'Nepali', 'nl': 'Dutch', 'no': 'Norwegian', 'pa': 'Punjabi (Gurmukhi)', 'pl': 'Polish', 'pt': 'Portuguese (Brazil)', 'pt-PT': 'Portuguese (Portugal)', 'ro': 'Romanian', 'ru': 'Russian', 'si': 'Sinhala', 'sk': 'Slovak', 'sq': 'Albanian', 'sr': 'Serbian', 'su': 'Sundanese', 'sv': 'Swedish', 'sw': 'Swahili', 'ta': 'Tamil', 'te': 'Telugu', 'th': 'Thai', 'tl': 'Filipino', 'tr': 'Turkish', 'uk': 'Ukrainian', 'ur': 'Urdu', 'vi': 'Vietnamese', 'yue': 'Cantonese', 'zh-CN': 'Chinese (Simplified)', 'zh-TW': 'Chinese (Mandarin/Taiwan)', 'zh': 'Chinese (Mandarin)'}
+2026-01-04 20:23:54,745 - DEBUG - pre-processing: <function tone_marks at 0x000002CD4A5C77E0>
+2026-01-04 20:23:54,745 - DEBUG - pre-processing: <function end_of_line at 0x000002CD4A5D4220>
+2026-01-04 20:23:54,745 - DEBUG - pre-processing: <function abbreviations at 0x000002CD4A5D40E0>
+2026-01-04 20:23:54,745 - DEBUG - pre-processing: <function word_sub at 0x000002CD4A5D42C0>
+2026-01-04 20:23:54,745 - DEBUG - text_parts: ["Move back, I can't see your head."]
+2026-01-04 20:23:54,745 - DEBUG - text_parts: 1
+2026-01-04 20:23:54,745 - DEBUG - data-0: f.req=%5B%5B%5B%22jQ1olc%22%2C%22%5B%5C%22Move%20back%2C%20I%20can%27t%20see%20your%20head.%5C%22%2C%5C%22en%5C%22%2Cnull%2C%5C%22null%5C%22%5D%22%2Cnull%2C%22generic%22%5D%5D%5D&
+2026-01-04 20:23:54,751 - DEBUG - Starting new HTTPS connection (1): translate.google.com.au:443
+2026-01-04 20:23:55,285 - DEBUG - https://translate.google.com.au:443 "POST /_/TranslateWebserverUi/data/batchexecute HTTP/1.1" 200 None
+2026-01-04 20:23:55,373 - DEBUG - headers-0: {'Referer': 'http://translate.google.com/', 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.106 Safari/537.36', 'Content-Type': 'application/x-www-form-urlencoded;charset=utf-8', 'Content-Length': '179'}
+2026-01-04 20:23:55,374 - DEBUG - url-0: https://translate.google.com.au/_/TranslateWebserverUi/data/batchexecute
+2026-01-04 20:23:55,374 - DEBUG - status-0: 200
+2026-01-04 20:23:55,375 - DEBUG - part-0 written to <_io.BufferedWriter name='c:\\Users\\alexs\\repos\\virtual-private-trainer\\audio-lib\\b672432aa3a838b6f0827c73ae1f8b0a.mp3'>
+2026-01-04 20:23:55,375 - DEBUG - part-0 created
+2026-01-04 20:23:55,375 - DEBUG - Saved to c:\Users\alexs\repos\virtual-private-trainer\audio-lib\b672432aa3a838b6f0827c73ae1f8b0a.mp3
+2026-01-04 20:23:58,581 - INFO - Playing Audio: First up is the world greatest stretch
+2026-01-04 20:23:59,057 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:24:03,336 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:24:03,648 - INFO - Playing Audio: Step one foot forward into a lunge position
+2026-01-04 20:24:07,820 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:24:08,805 - INFO - Playing Audio: Place both hands on the ground inside your front foot
+2026-01-04 20:24:12,215 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:24:13,964 - INFO - Playing Audio: Rotate your torso and reach your arm up towards the ceiling
+2026-01-04 20:24:16,591 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:24:19,017 - INFO - Playing Audio: Hold for a moment, then return your hand to the ground
+2026-01-04 20:24:21,301 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:24:24,117 - INFO - Playing Audio: Step back to the starting position and repeat on the other side
+2026-01-04 20:24:26,090 - DEBUG - Loop State: REST, Index: 1
+2026-01-04 20:24:28,082 - INFO - State changed to ACTIVE for World Greatest stretch
+2026-01-04 20:24:30,336 - DEBUG - Loop State: ACTIVE, Index: 1
+2026-01-04 20:24:34,659 - DEBUG - Loop State: ACTIVE, Index: 1
+2026-01-04 20:24:38,803 - DEBUG - Loop State: ACTIVE, Index: 1
+2026-01-04 20:24:43,020 - DEBUG - Loop State: ACTIVE, Index: 1
