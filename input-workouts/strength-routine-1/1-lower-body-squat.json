@@ -1,33 +1,24 @@
 {
     "routine": [
         {
-            "activity": "Warm up with cardio machine of your choice",
-            "audio": [
-                "Ready to start your lower body strength workout? Let's begin with a warm-up on your favorite cardio machine",
-                "Choose a rower, bike or even go for a run",
-                "Get ready to move!"
-            ],
-            "duration": 2
-        },
-        {
             "title": "Dynamic Stretching & Movement Prep",
             "audio": [
-                "Moving onto the warm up",
-                "There will be 3 sets of 4 warm ups to activate muscles for squats."
+                "There will be 3 sets of 4 warm ups to activate muscles for your heavy squats."
             ],
             "sets": 3,
             "activity": [
                 {
                     "activity": "World Greatest stretch",
                     "sets": 1,
-                    "reps_per_side": 5,
+                    "reps_per_side_grouped": 5,
                     "audio": [
-                        "First up is the world greatest stretch",
-                        "Step one foot forward into a lunge position",
-                        "Place both hands on the ground inside your front foot",
-                        "Rotate your torso and reach your arm up towards the ceiling",
-                        "Hold for a moment, then return your hand to the ground",
-                        "Step back to the starting position and repeat on the other side"
+                        "Let's get into the world greatest stretch",
+                        { "lunge elbow down": "Step forward into a lunge, bringing your elbow down to the floor." },
+                        { "rotation hand up": "Rotate your torso and reach your hand up towards the ceiling." },
+                        { "lunge elbow down": "Bring your hand back down." },
+                        "Now switch sides.",
+                        { "lunge elbow down": "Lunge and elbow down on the other side." },
+                        { "rotation hand up": "Rotate and reach up." }
                     ]
                 },
                 {
@@ -36,10 +27,11 @@
                     "reps": 10,
                     "audio": [
                         "Next we have the one and a quarter air squat",
-                        "Stand with your feet shoulder-width apart",
-                        "Lower into a squat position, going as low as you can while keeping your chest up",
-                        "Rise back up halfway, then lower back down into the squat",
-                        "Finally, stand all the way up to complete one rep"
+                        { "standing": "Stand with your feet shoulder-width apart" },
+                        { "squat hold": "Lower into a squat position, going as low as you can while keeping your chest up" },
+                        { "ascending": "Rise back up halfway..." },
+                        { "squat hold": "...then lower back down into the squat" },
+                        { "standing": "Finally, stand all the way up to complete one rep" }
                     ]
                 },
                 {
@@ -69,19 +61,28 @@
             ]
         },
         {
+            "activity": "Warm up rower cardio",
+            "audio": [
+                "Start your lower body warm up on the rower.",
+                "Start in 3,2,1"
+            ],
+            "duration": 2
+        },
+        {
             "activity": "Back squat",
             "sets": 4,
             "reps": 5,
             "rest": 120,
             "weight_kg": 75,
             "audio": [
-                "Now we are ready for back squats",
-                "Set up under the bar with it resting on your upper traps",
-                "Keep your chest up and core engaged as you descend into the squat",
-                "Drive through your heels to return to standing",
-                "Let's get started with 4 sets of 5 reps"
+                "Now we are ready for back squats. Let's practice the movement.",
+                { "standing": "Stand with feet shoulder-width apart, core engaged." },
+                { "descending": "Sit back into your lowest position, keeping your chest up." },
+                { "squat hold": "Hold for a second at the bottom." },
+                { "ascending": "Stand up activating your glutes and driving through your heels."}
             ]
         },
+
         {
             "title": "Strength Workout",
             "sets": 4,

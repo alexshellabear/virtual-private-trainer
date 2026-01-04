@@ -22,14 +22,37 @@ A virtual trainer that explains my workout, gives me cues, counts my weight/reps
             text-to-audio-dict.json | {"0a543cee85bbba1917dbe839bc863a02": {"text","Good morning!","config": "gTTS native"}}
 - selecting the workout. it should ask the user via the terminal to select the workout, then pass the int for the week selection then the int for the specific workout for the first time. Once there is workout history the program will go to the next one (+1) but also give the user an option to change via the terminal asking to select current and print the name or re-select workout
 - markdown is provided and stored as this is a good reference which can be converted into json manually
-
-# TODO
 - pose_validator.py, this module will check if all joints are captured in the video. It will give audio instructions to frame the video.
     - I'm likely to start the video with one person looking at the camera, capture their face and store it for object tracking, potentially my wife might walk into the video field of view later, ignore the second person detected by YOLO
     - I want all joint positions in the video, give instructions of where i should move or to move the camera, maybe towards the camera, away from the camera etc.
     - Add audio to audio que
     - Pose validator has to be fired first in order to progress to the next section, in order to move from rest to active state the pose validator must be valid. Let the audio que finish before inserting new commands to adjust the screen. Also when active don't provide audio adjustments, only for the transition period from rest to active.
-- Audio to play guiding me through each movement in real time.
+    - determine if I'm side or face on, different angles will affect rep counting. Determine if I am my left side, right side,front or back towards the camera.
+    - Audio to play guiding me through each movement in real time and use this to generate training data.
+        - input json audio is an array that is an array of strings with occasional dictionaries that have different actions
+        - {"break":int}, play silence for this int period of time 
+        - Audibly count the reps for the user, "1, 5 more to go", "2, 4 more to go"
+        - When resting indicate to the user how long the rest is, aka "2 minutes rest"
+        - {"identifier": "text"} - These are custom identifiers used by the rep counter class to provide cues and give input to the user, wait until that position has been achieved before playing the next
+            e.g. for a squat the cues might be
+                ...
+                { "standing": "Stand with feet shoulder-width apart, core engaged." },
+                { "descending": "Sit back into your lowest position, keeping your chest up." },
+                { "squat hold": "Hold for a second at the bottom." },
+                { "ascending": "Stand up activating your glutes and driving through your heels."},
+                ...
+                The audio would be read and then waiting a few seconds for the user to enter that portion of the exercise
+# TODO
+- use youtube videos as training data
+
+- use https://github.com/SajjadAemmi/YOLOv8-Pose-Classification for pose classification and rep counting. YOLO-Pose-Classification & Rep-Counting: This project uses a k-Nearest Neighbors (k-NN) algorithm rather than hardcoded angles. It is excellent for generalized movement because you can "train" it on new exercises by simply recording a few frames of the "up" and "down" positions. 
+    - for each activity that doesn't have rep_counter get the user to record themselves doing the exercise and use the microphone to listen to what the name of the state is
+    - for anything that is predefined in here https://github.com/ultralytics/ultralytics/blob/main/docs/en/guides/workouts-monitoring.md use this as the first pass
+    - Classes will be stored in utils/activity-classes and if they are a ML approach then use utils/activity-data for storing the recorded data
+
+- update worlds_greatest_stretch and other relevant code files so that if I start with my right hand down then I should be prompted to 
+# Long term TODO
+- use Anrold Schwarztnegers voice
 
 # Assumptions
 - There will only be one person in a frame

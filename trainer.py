@@ -12,6 +12,12 @@ import cv2
 import pygame
 from concurrent.futures import ThreadPoolExecutor
 
+# Try importing speech recognition for training mode
+try:
+    import speech_recognition as sr
+except ImportError:
+    sr = None
+
 from utils.audio_coach import AudioCoach
 from utils.rep_counter import RepCounter
 from utils.clean_history import clean_workout_history
@@ -45,13 +51,16 @@ class VirtualTrainer:
         self.validator = PoseValidator(self.audio)
         self.speech_speed = 1.25
         self.pose_history = []
+        self.user_orientation = "unknown"
         
         self.audio_loaded = False
         self.audio_queue = []
         self.audio_break_duration = 0
         self.audio_break_start = 0
+        self.waiting_for_state = None
         self.rest_start_time = 0
         self.start_time = 0
+        self.program_start_time = time.time()
         
         self.setup_logging()
         
@@ -192,6 +201,69 @@ class VirtualTrainer:
         thread = threading.Thread(target=_upload)
         thread.start()
 
+    def listen_for_command(self, prompt_text):
+        """Listens for a voice command or falls back to terminal input."""
+        print(f"\n[Trainer] {prompt_text}")
+        self.audio.speak(prompt_text)
+        
+        # Wait for audio to finish speaking
+        while pygame.mixer.music.get_busy():
+            time.sleep(0.1)
+
+        if sr:
+            r = sr.Recognizer()
+            with sr.Microphone() as source:
+                print("[Mic] Listening...")
+                try:
+                    audio = r.listen(source, timeout=5)
+                    text = r.recognize_google(audio)
+                    print(f"[Mic] Heard: {text}")
+                    return text
+                except sr.WaitTimeoutError:
+                    print("[Mic] Timeout.")
+                except sr.UnknownValueError:
+                    print("[Mic] Could not understand.")
+                except Exception as e:
+                    print(f"[Mic] Error: {e}")
+        
+        # Fallback
+        return input(f"[Input] {prompt_text} (Type here): ")
+
+    def learn_exercise(self, exercise_name):
+        """Interactive loop to learn a new exercise."""
+        logging.info(f"Starting training for {exercise_name}")
+        training_data = []
+        
+        states_to_learn = ["Start Position", "Active Position"] # Default 2 states
+        
+        for i, default_name in enumerate(states_to_learn):
+            # 1. Ask for label
+            label = self.listen_for_command(f"Get into the {default_name} and say the name of this state (e.g. 'Up', 'Down').")
+            if not label: label = default_name
+            
+            # 2. Record Frames
+            self.audio.speak(f"Hold {label} for 3 seconds.")
+            time.sleep(1) # Give time to settle
+            
+            start_capture = time.time()
+            frames_captured = 0
+            while time.time() - start_capture < 3.0:
+                ret, frame = self.cap.read()
+                if not ret: break
+                
+                results = list(self.model.track(frame, verbose=False, persist=True))
+                active_result, active_idx = self.validator.get_active_result(results)
+                
+                if active_result and active_idx is not None:
+                    kpts = active_result.keypoints.xy[active_idx].cpu().numpy()
+                    training_data.append((kpts, label))
+                    frames_captured += 1
+                
+            self.audio.speak(f"Captured {frames_captured} frames for {label}.")
+            
+        self.rep_counter.classifier.train_new_model(exercise_name.lower(), training_data)
+        self.audio.speak("Training complete. Resuming workout.")
+
     def run(self):
         self.cap = cv2.VideoCapture(0)
         frame_count = 0
@@ -202,13 +274,16 @@ class VirtualTrainer:
             frame_count += 1
             self.validator.set_frame_dimensions(frame.shape[0], frame.shape[1])
 
-            if DEBUG and frame_count % 30 == 0: # Print every ~1 sec
-                print(f"[DEBUG] State: {self.state} | Idx: {self.current_exercise_index} | AudioQ: {len(self.audio_queue)}")
+            if DEBUG:
+                if frame_count % 30 == 0: # Print every ~1 sec
+                    elapsed = time.time() - self.program_start_time
+                    print(f"[DEBUG] Time: {elapsed:.2f}s | Frame: {frame_count} | State: {self.state} | Idx: {self.current_exercise_index} | AudioQ: {len(self.audio_queue)}")
                 logging.debug(f"Loop State: {self.state}, Index: {self.current_exercise_index}")
 
             if self.current_exercise_index >= len(self.workout_queue):
                 cv2.putText(frame, "WORKOUT COMPLETE", (50, 300), cv2.FONT_HERSHEY_SIMPLEX, 2, (0, 255, 0), 3)
-                cv2.imshow('Virtual Private Trainer', frame)
+                display_frame = cv2.resize(frame, None, fx=2.0, fy=2.0)
+                cv2.imshow('Virtual Private Trainer', display_frame)
                 if cv2.waitKey(1) & 0xFF == ord('q'): break
                 continue
 
@@ -216,23 +291,55 @@ class VirtualTrainer:
             # Use track() to persist IDs for the validator
             results = list(self.model.track(frame, persist=True, verbose=False, stream=True))
 
+            if DEBUG:
+                for r in results:
+                    if r.boxes:
+                        logging.debug(f"Frame {frame_count} YOLO Detections: {len(r.boxes)}")
+                        for i, box in enumerate(r.boxes):
+                            b_id = int(box.id[0]) if box.id is not None else None
+                            b_cls = int(box.cls[0])
+                            b_conf = float(box.conf[0])
+                            b_xyxy = [round(x, 1) for x in box.xyxy[0].tolist()]
+                            
+                            kpts_log = ""
+                            if r.keypoints is not None:
+                                kpts = r.keypoints.xy[i].cpu().numpy().tolist()
+                                kpts_formatted = [[round(p[0], 1), round(p[1], 1)] for p in kpts]
+                                kpts_log = f" | Kpts: {kpts_formatted}"
+
+                            logging.debug(f"  ID: {b_id} | Cls: {b_cls} | Conf: {b_conf:.2f} | Box: {b_xyxy}{kpts_log}")
+
+            current_keypoints = None
+            rep_counted = False
+
             # Validate and Get Active User
             active_result, active_idx = self.validator.get_active_result(results)
             
             if active_result is None or active_idx is None:
                 cv2.putText(frame, "USER NOT DETECTED", (50, 300), cv2.FONT_HERSHEY_SIMPLEX, 1.5, (0, 0, 255), 3)
+                self.user_orientation = "unknown"
             else:
                 # Extract keypoints for the active user
                 # active_result.keypoints.xy is (N, 17, 2), we want the specific index
                 kpts_tensor = active_result.keypoints.xy[active_idx]
                 kpts_list = kpts_tensor.cpu().numpy().tolist()
                 kpts_numpy = kpts_tensor.cpu().numpy()
-                
-                # Check framing (Audio feedback)
-                self.validator.validate_framing(kpts_numpy)
-                
+                current_keypoints = kpts_numpy
+                self.user_orientation = self.validator.determine_orientation(current_keypoints)
+
                 # Save Pose Data (Only for active user)
                 self.pose_history.append({"timestamp": time.time(), "keypoints": kpts_list})
+
+                # Always process pose to update current_state (even in REST)
+                current_block = self.workout_queue[self.current_exercise_index]
+                ex_name = current_block.get("activity", "Unknown")
+                
+                result = self.rep_counter.process_pose(kpts_numpy, ex_name)
+                if result == "NEED_TRAINING":
+                    # Pause and Learn
+                    self.learn_exercise(ex_name)
+                else:
+                    rep_counted = result
 
             for result in results:
                 # Draw Keypoints
@@ -241,15 +348,18 @@ class VirtualTrainer:
                 # Rep Counting Logic
                 # Only process if we have an active user and we are in ACTIVE state
                 if self.state == "ACTIVE" and active_result is not None:
-                    # Get current exercise name
-                    current_block = self.workout_queue[self.current_exercise_index]
-                    ex_name = current_block.get("activity", "Unknown")
-                    
-                    # Pass keypoints (xy coordinates)
-                    if self.rep_counter.process_pose(kpts_numpy, ex_name):
+                    if rep_counted:
                         print(f"Rep Counted! Total: {self.rep_counter.reps}")
-                        # Optional: Audio feedback for reps
-                        # self.audio.speak(str(self.rep_counter.reps))
+                        
+                        # Audio Feedback
+                        current_block = self.workout_queue[self.current_exercise_index]
+                        target_reps = current_block.get("reps") or current_block.get("reps_per_side")
+                        if target_reps:
+                            remaining = target_reps - self.rep_counter.reps
+                            if remaining > 0:
+                                self.audio.speak(f"{self.rep_counter.reps}, {remaining} more to go")
+                            else:
+                                self.audio.speak(f"{self.rep_counter.reps}")
 
             # UI Overlay
             status_text = f"State: {self.state}"
@@ -261,10 +371,26 @@ class VirtualTrainer:
                 elif item.get("type") == "rest":
                     status_text += f" | REST ({item.get('duration')}s)"
 
-            cv2.putText(frame, status_text, (10, 30), 
+            cv2.putText(frame, status_text, (10, 30),
                         cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+            
+            # Display Exercise State (e.g. Descending, Standing)
+            cv2.putText(frame, f"Ex State: {self.rep_counter.current_state.upper()}", (10, 110),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, (255, 100, 0), 2)
 
-            cv2.imshow('Virtual Private Trainer', frame)
+            # Color coding for orientation
+            orient_color = (0, 255, 255) # Yellow default
+            if self.user_orientation == "front":
+                orient_color = (0, 255, 0) # Green
+            elif self.user_orientation == "back":
+                orient_color = (0, 0, 255) # Red
+
+            orientation_text = f"Facing: {self.user_orientation.capitalize()}"
+            cv2.putText(frame, orientation_text, (10, 70),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.8, orient_color, 2)
+
+            display_frame = cv2.resize(frame, None, fx=2.0, fy=2.0)
+            cv2.imshow('Virtual Private Trainer', display_frame)
 
             # State Machine Logic
             current_block = self.workout_queue[self.current_exercise_index]
@@ -272,14 +398,51 @@ class VirtualTrainer:
             if self.state == "REST":
                 # 1. Load Audio
                 if not self.audio_loaded:
+                    self.rep_counter.reps = 0
                     raw_audio = current_block.get("audio", [])
                     if isinstance(raw_audio, str): raw_audio = [raw_audio]
-                    self.audio_queue = list(raw_audio)
+                    
+                    # Announce rest duration
+                    audio_list = list(raw_audio)
+                    if current_block.get("type") == "rest":
+                        duration = current_block.get("duration", 0)
+                        if duration >= 60 and duration % 60 == 0:
+                            mins = int(duration / 60)
+                            audio_list.append(f"{mins} minute{'s' if mins > 1 else ''} rest")
+                        else:
+                            audio_list.append(f"{duration} seconds rest")
+
+                    self.audio_queue = audio_list
                     self.audio_loaded = True
                 
+                # Check for early start (Skip Intro)
+                # If user does a valid rep while audio is playing or queued
+                if rep_counted and self.validator.validate_framing(current_keypoints, should_speak=False):
+                    target_reps = current_block.get("reps") or current_block.get("reps_per_side")
+                    if target_reps:
+                        logging.info("User performed rep during intro - Skipping explanation.")
+                        pygame.mixer.music.stop()
+                        self.audio_queue = []
+                        self.waiting_for_state = None
+                        self.audio_break_duration = 0
+                        
+                        self.state = "ACTIVE"
+                        self.start_time = time.time()
+                        
+                        remaining = target_reps - self.rep_counter.reps
+                        if remaining < 0: remaining = 0
+                        self.audio.speak(f"Skipping explanation, {self.rep_counter.reps}, {remaining} more to go")
+                        continue
+
                 # 2. Process Audio
                 if pygame.mixer.music.get_busy():
                     pass # Wait for audio to finish
+                elif self.waiting_for_state:
+                    # Wait for user to reach the target state
+                    if self.rep_counter.current_state == self.waiting_for_state:
+                        logging.info(f"User reached state: {self.waiting_for_state}")
+                        self.waiting_for_state = None
+                    # Else: continue waiting
                 elif self.audio_break_duration > 0:
                     if time.time() - self.audio_break_start > self.audio_break_duration:
                         self.audio_break_duration = 0
@@ -293,6 +456,12 @@ class VirtualTrainer:
                     elif isinstance(next_audio, dict) and "break" in next_audio:
                         self.audio_break_duration = next_audio["break"]
                         self.audio_break_start = time.time()
+                    elif isinstance(next_audio, dict):
+                        # Handle state-based cues e.g. {"standing": "Stand up..."}
+                        target_state = list(next_audio.keys())[0]
+                        text = next_audio[target_state]
+                        self.audio.speak(text, speed=self.speech_speed)
+                        self.waiting_for_state = target_state
                 else:
                     # Audio finished
                     if current_block.get("type") == "rest":
@@ -311,14 +480,18 @@ class VirtualTrainer:
                             self.rest_start_time = 0
                     else:
                         # Switch to Active
-                        self.state = "ACTIVE"
-                        self.start_time = time.time()
-                        self.rep_counter.reps = 0
-                        logging.info(f"State changed to ACTIVE for {current_block.get('activity')}")
+                        if self.validator.validate_framing(current_keypoints, should_speak=True):
+                            self.state = "ACTIVE"
+                            self.start_time = time.time()
+                            self.rep_counter.reps = 0
+                            logging.info(f"State changed to ACTIVE for {current_block.get('activity')}")
 
             elif self.state == "ACTIVE":
                 current_block = self.workout_queue[self.current_exercise_index]
-                target_reps = current_block.get("reps") or current_block.get("reps_per_side")
+                target_reps = current_block.get("reps")
+                if not target_reps and current_block.get("reps_per_side"):
+                    target_reps = current_block.get("reps_per_side") * 2
+                
                 target_duration = current_block.get("duration")
                 
                 is_done = False

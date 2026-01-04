@@ -10,3 +10,5 @@ gTTS
 pygame
 python-dotenv
 requests
+SpeechRecognition
+pyaudio

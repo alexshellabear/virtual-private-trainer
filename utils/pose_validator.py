@@ -50,17 +50,14 @@ class PoseValidator:
         
         return None, None
 
-    def validate_framing(self, keypoints_xy):
+    def validate_framing(self, keypoints_xy, should_speak=True):
         """
         Checks if the user is fully in frame and provides audio feedback.
         keypoints_xy: numpy array of shape (17, 2)
+        Returns: True if framing is valid, False otherwise.
         """
         if not self.is_locked or keypoints_xy is None or len(keypoints_xy) == 0:
-            return
-
-        # Throttle audio feedback
-        if time.time() - self.last_feedback_time < self.feedback_cooldown:
-            return
+            return False
 
         # Keypoint Indices (COCO):
         # 0: Nose, 15: L-Ankle, 16: R-Ankle
@@ -69,7 +66,7 @@ class PoseValidator:
         # Filter out (0,0) points which indicate low confidence/missing
         valid_points = keypoints_xy[np.any(keypoints_xy > 0, axis=1)]
         if len(valid_points) < 5:
-            return # Not enough points to judge
+            return False # Not enough points to judge
 
         min_x, min_y = np.min(valid_points, axis=0)
         max_x, max_y = np.max(valid_points, axis=0)
@@ -96,6 +93,60 @@ class PoseValidator:
             instruction = "Come a little closer."
         
         if instruction:
-            print(f"[PoseValidator] {instruction}")
-            self.audio.speak(instruction)
-            self.last_feedback_time = time.time()
+            if should_speak and (time.time() - self.last_feedback_time > self.feedback_cooldown):
+                print(f"[PoseValidator] {instruction}")
+                self.audio.speak(instruction)
+                self.last_feedback_time = time.time()
+            return False
+            
+        return True
+
+    def determine_orientation(self, keypoints_xy):
+        """
+        Determines user orientation (front, back, left, right) based on keypoint visibility.
+        Returns: A string 'front', 'back', 'left', 'right', or 'unknown'.
+        """
+        if keypoints_xy is None or len(keypoints_xy) == 0:
+            return "unknown"
+
+        # Helper to check if a keypoint is visible (coordinates are not 0,0)
+        def is_visible(kp_index):
+            return np.any(keypoints_xy[kp_index] > 0)
+
+        # Keypoint indices from COCO
+        nose = 0
+        left_eye = 1
+        right_eye = 2
+        left_ear = 3
+        right_ear = 4
+        left_shoulder = 5
+        right_shoulder = 6
+
+        # --- Visibility checks ---
+        has_nose = is_visible(nose)
+        has_l_eye = is_visible(left_eye)
+        has_r_eye = is_visible(right_eye)
+        has_l_ear = is_visible(left_ear)
+        has_r_ear = is_visible(right_ear)
+        has_l_shoulder = is_visible(left_shoulder)
+        has_r_shoulder = is_visible(right_shoulder)
+
+        # Scoring for side profile
+        # If I am facing Left, my Right side is visible to the camera
+        right_side_score = sum([has_r_eye, has_r_ear, has_r_shoulder])
+        # If I am facing Right, my Left side is visible to the camera
+        left_side_score = sum([has_l_eye, has_l_ear, has_l_shoulder])
+
+        if has_nose and has_l_eye and has_r_eye:
+            return "front"
+        
+        if has_l_shoulder and has_r_shoulder and not has_nose and not has_l_eye and not has_r_eye:
+            return "back"
+
+        # Side determination with threshold
+        if right_side_score > left_side_score:
+            return "left"
+        if left_side_score > right_side_score:
+            return "right"
+
+        return "unknown"
