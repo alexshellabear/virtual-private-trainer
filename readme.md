@@ -42,15 +42,22 @@ A virtual trainer that explains my workout, gives me cues, counts my weight/reps
                 { "ascending": "Stand up activating your glutes and driving through your heels."},
                 ...
                 The audio would be read and then waiting a few seconds for the user to enter that portion of the exercise
-# TODO
-- use youtube videos as training data
+- update worlds_greatest_stretch and other relevant code files so that if I start with my right hand down then I should be prompted to be facing my left hand side to the camera. Likewise the opposite if it is the opposite side. 
+- for reps_per_side_grouped all x reps should be finished before switching to the next side.
+- for single sided exercises there will also be a tag "side": "left" or "side": "right" added to the audio elements
 
+# TODO
+- Implement training routine so that if an activity does not have a name 
+- reduce size of text on printout screen, if activity name is long the reps are printed off screen, put reps somewhere else to not suffer from overflow
+- orientation doesn't update for each frame
+- 
+- Should get wide lense so you don't have to stand in the doorway so far away from the screen.
 - use https://github.com/SajjadAemmi/YOLOv8-Pose-Classification for pose classification and rep counting. YOLO-Pose-Classification & Rep-Counting: This project uses a k-Nearest Neighbors (k-NN) algorithm rather than hardcoded angles. It is excellent for generalized movement because you can "train" it on new exercises by simply recording a few frames of the "up" and "down" positions. 
     - for each activity that doesn't have rep_counter get the user to record themselves doing the exercise and use the microphone to listen to what the name of the state is
     - for anything that is predefined in here https://github.com/ultralytics/ultralytics/blob/main/docs/en/guides/workouts-monitoring.md use this as the first pass
     - Classes will be stored in utils/activity-classes and if they are a ML approach then use utils/activity-data for storing the recorded data
 
-- update worlds_greatest_stretch and other relevant code files so that if I start with my right hand down then I should be prompted to 
+
 # Long term TODO
 - use Anrold Schwarztnegers voice
 

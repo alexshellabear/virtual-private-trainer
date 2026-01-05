@@ -93,3 +93,23 @@ class WorldsGreatestStretchActivity(BaseActivity):
                 self.stage = "DOWN"
         
         return False
+
+    def check_orientation(self, keypoints, current_orientation):
+        """
+        Ensures the user is facing the camera with their open side during the stretch.
+        """
+        # 9: L-Wrist, 10: R-Wrist
+        l_wrist = keypoints[9]
+        r_wrist = keypoints[10]
+        
+        # Check which hand is down (larger Y value means lower on screen)
+        # We assume the hand on the floor is significantly lower than the other or hips
+        if self.is_visible(l_wrist) and self.is_visible(r_wrist):
+            if r_wrist[1] > l_wrist[1] + 50: # Right hand down
+                # If Right hand is down, we rotate Left. We need to see the Left side (Orientation 'right')
+                if current_orientation == "left":
+                    return "Turn around, I need to see your open side."
+            elif l_wrist[1] > r_wrist[1] + 50: # Left hand down
+                if current_orientation == "right":
+                    return "Turn around, I need to see your open side."
+        return None

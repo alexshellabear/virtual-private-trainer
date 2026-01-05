@@ -12,11 +12,11 @@
                     "sets": 1,
                     "reps_per_side_grouped": 5,
                     "audio": [
-                        "Let's get into the world greatest stretch",
+                        { "text": "Let's get into the world greatest stretch, starting with the left side.", "side": "left" },
                         { "lunge elbow down": "Step forward into a lunge, bringing your elbow down to the floor." },
                         { "rotation hand up": "Rotate your torso and reach your hand up towards the ceiling." },
                         { "lunge elbow down": "Bring your hand back down." },
-                        "Now switch sides.",
+                        { "text": "Now switch sides.", "side": "right" },
                         { "lunge elbow down": "Lunge and elbow down on the other side." },
                         { "rotation hand up": "Rotate and reach up." }
                     ]
@@ -39,11 +39,11 @@
                     "sets": 1,
                     "reps_per_side": 5,
                     "audio": [
-                        "Now let's do the 90/90 ER hinge",
-                        "Sit on the ground with one leg bent in front of you at a 90-degree angle and the other leg bent behind you also at a 90-degree angle",
-                        "Place your hands on your hips and engage your core",
-                        "Hinge forward at the hips, keeping your back straight and chest up",
-                        "Return to the starting position and repeat on the other side"
+                        { "text": "Now let's do the 90/90 ER hinge, left side first.", "side": "left" },
+                        { "text": "Sit on the ground with one leg bent in front of you at a 90-degree angle and the other leg bent behind you also at a 90-degree angle" },
+                        { "text": "Place your hands on your hips and engage your core" },
+                        { "text": "Hinge forward at the hips, keeping your back straight and chest up" },
+                        { "text": "Return to the starting position and repeat on the other side" }
                     ]
                 },
                 {
@@ -96,7 +96,10 @@
                 {
                     "activity": "Elevated dumbbell Reverse lunges",
                     "reps_per_side": 6,
-                    "weight_kg": 15
+                    "weight_kg": 15,
+                    "audio": [
+                        { "text": "Grab your dumbbells for reverse lunges, starting with the left leg.", "side": "left" }
+                    ]
                 }
             ]
         },

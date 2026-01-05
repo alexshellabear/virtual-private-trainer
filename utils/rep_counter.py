@@ -38,6 +38,10 @@ class BaseActivity:
         self.stage = "UP"
         self.current_state = "unknown"
 
+    def check_orientation(self, keypoints, current_orientation):
+        """Returns a feedback string if orientation is incorrect, else None."""
+        return None
+
 class RepCounter:
     def __init__(self):
         self.reps = 0

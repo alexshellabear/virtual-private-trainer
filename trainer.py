@@ -1,4 +1,5 @@
 import os
+import numpy as np
 from ultralytics import YOLO
 import json
 import logging
@@ -52,12 +53,14 @@ class VirtualTrainer:
         self.speech_speed = 1.25
         self.pose_history = []
         self.user_orientation = "unknown"
+        self.current_side = 1
         
         self.audio_loaded = False
         self.audio_queue = []
         self.audio_break_duration = 0
         self.audio_break_start = 0
         self.waiting_for_state = None
+        self.waiting_for_orientation = None
         self.rest_start_time = 0
         self.start_time = 0
         self.program_start_time = time.time()
@@ -353,13 +356,18 @@ class VirtualTrainer:
                         
                         # Audio Feedback
                         current_block = self.workout_queue[self.current_exercise_index]
-                        target_reps = current_block.get("reps") or current_block.get("reps_per_side")
+                        target_reps = current_block.get("reps") or current_block.get("reps_per_side") or current_block.get("reps_per_side_grouped")
                         if target_reps:
                             remaining = target_reps - self.rep_counter.reps
                             if remaining > 0:
                                 self.audio.speak(f"{self.rep_counter.reps}, {remaining} more to go")
                             else:
                                 self.audio.speak(f"{self.rep_counter.reps}")
+
+                    # Check Orientation (if activity supports it)
+                    if self.rep_counter.current_handler:
+                        orient_warning = self.rep_counter.current_handler.check_orientation(current_keypoints, self.user_orientation)
+                        self.validator.send_feedback(orient_warning)
 
             # UI Overlay
             status_text = f"State: {self.state}"
@@ -418,12 +426,13 @@ class VirtualTrainer:
                 # Check for early start (Skip Intro)
                 # If user does a valid rep while audio is playing or queued
                 if rep_counted and self.validator.validate_framing(current_keypoints, should_speak=False):
-                    target_reps = current_block.get("reps") or current_block.get("reps_per_side")
+                    target_reps = current_block.get("reps") or current_block.get("reps_per_side") or current_block.get("reps_per_side_grouped")
                     if target_reps:
                         logging.info("User performed rep during intro - Skipping explanation.")
                         pygame.mixer.music.stop()
                         self.audio_queue = []
                         self.waiting_for_state = None
+                        self.waiting_for_orientation = None
                         self.audio_break_duration = 0
                         
                         self.state = "ACTIVE"
@@ -437,6 +446,12 @@ class VirtualTrainer:
                 # 2. Process Audio
                 if pygame.mixer.music.get_busy():
                     pass # Wait for audio to finish
+                elif self.waiting_for_orientation:
+                    # Wait for user to correct orientation
+                    if self.user_orientation == self.waiting_for_orientation:
+                        logging.info(f"User corrected orientation to: {self.waiting_for_orientation}")
+                        self.waiting_for_orientation = None
+                    # Else continue waiting (loop will redraw frame)
                 elif self.waiting_for_state:
                     # Wait for user to reach the target state
                     if self.rep_counter.current_state == self.waiting_for_state:
@@ -453,15 +468,32 @@ class VirtualTrainer:
                             print(f"[DEBUG] Playing Audio: {next_audio[:30]}...")
                         logging.info(f"Playing Audio: {next_audio}")
                         self.audio.speak(next_audio, speed=self.speech_speed)
-                    elif isinstance(next_audio, dict) and "break" in next_audio:
-                        self.audio_break_duration = next_audio["break"]
-                        self.audio_break_start = time.time()
                     elif isinstance(next_audio, dict):
-                        # Handle state-based cues e.g. {"standing": "Stand up..."}
-                        target_state = list(next_audio.keys())[0]
-                        text = next_audio[target_state]
-                        self.audio.speak(text, speed=self.speech_speed)
-                        self.waiting_for_state = target_state
+                        if "break" in next_audio:
+                            self.audio_break_duration = next_audio["break"]
+                            self.audio_break_start = time.time()
+                        
+                        # Handle Side Orientation Tags
+                        if "side" in next_audio:
+                            target_side = next_audio["side"].lower()
+                            # Mapping: Left Side Exercise -> Show Left Side -> Face Right
+                            expected_orientation = "right" if target_side == "left" else "left"
+                            
+                            if self.user_orientation != "unknown" and self.user_orientation != expected_orientation:
+                                self.audio.speak(f"Turn around, I need to see your {target_side} side.")
+                                self.waiting_for_orientation = expected_orientation
+
+                        # Handle Text or State Cues
+                        if "text" in next_audio:
+                            self.audio.speak(next_audio["text"], speed=self.speech_speed)
+                        else:
+                            # Fallback: Check for state keys excluding reserved keywords
+                            keys = [k for k in next_audio.keys() if k not in ["break", "side", "text"]]
+                            if keys:
+                                target_state = keys[0]
+                                text = next_audio[target_state]
+                                self.audio.speak(text, speed=self.speech_speed)
+                                self.waiting_for_state = target_state
                 else:
                     # Audio finished
                     if current_block.get("type") == "rest":
@@ -489,14 +521,29 @@ class VirtualTrainer:
             elif self.state == "ACTIVE":
                 current_block = self.workout_queue[self.current_exercise_index]
                 target_reps = current_block.get("reps")
-                if not target_reps and current_block.get("reps_per_side"):
+                grouped_reps = current_block.get("reps_per_side_grouped")
+                
+                if grouped_reps:
+                    target_reps = grouped_reps
+                elif not target_reps and current_block.get("reps_per_side"):
                     target_reps = current_block.get("reps_per_side") * 2
                 
                 target_duration = current_block.get("duration")
                 
                 is_done = False
-                if target_reps and self.rep_counter.reps >= target_reps:
+                if grouped_reps:
+                    if self.rep_counter.reps >= grouped_reps:
+                        if self.current_side == 1:
+                            self.audio.speak("Switch sides.")
+                            self.current_side = 2
+                            self.rep_counter.reps = 0
+                            if self.rep_counter.current_handler: self.rep_counter.current_handler.reset()
+                            time.sleep(3) # Brief pause for user to react
+                        else:
+                            is_done = True
+                elif target_reps and self.rep_counter.reps >= target_reps:
                     is_done = True
+                
                 if target_duration and (time.time() - self.start_time) >= target_duration:
                     is_done = True
                 
@@ -505,6 +552,7 @@ class VirtualTrainer:
                     self.audio.speak("Done.", speed=self.speech_speed)
                     self.state = "REST"
                     self.current_exercise_index += 1
+                    self.current_side = 1
                     self.audio_loaded = False
 
             key = cv2.waitKey(1) & 0xFF

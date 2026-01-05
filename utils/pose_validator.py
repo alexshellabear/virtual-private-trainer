@@ -101,6 +101,13 @@ class PoseValidator:
             
         return True
 
+    def send_feedback(self, instruction):
+        """Triggers audio feedback if cooldown has passed."""
+        if instruction and (time.time() - self.last_feedback_time > self.feedback_cooldown):
+            print(f"[PoseValidator] {instruction}")
+            self.audio.speak(instruction)
+            self.last_feedback_time = time.time()
+
     def determine_orientation(self, keypoints_xy):
         """
         Determines user orientation (front, back, left, right) based on keypoint visibility.

@@ -254,5 +254,17 @@
     "9f5b3af40b0ad96c7066a9f42a32ec96": {
         "text": "Rotate and reach up.",
         "config": "gTTS native"
+    },
+    "af7a9284b4381ba529229d77cd2285a1": {
+        "text": "Switch sides.",
+        "config": "gTTS native"
+    },
+    "7d92bc7be9741bd72a71b8f218405e77": {
+        "text": "Turn around, I need to see your left side.",
+        "config": "gTTS native"
+    },
+    "846fcdc1a7dd0a520ec929280c92419a": {
+        "text": "Let's get into the world greatest stretch, starting with the left side.",
+        "config": "gTTS native"
     }
 }
